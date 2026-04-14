@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Curl Angle Planner</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Curling Shot Planner</p>
+          <h1>Upload a curling image or video and map the best line to the button.</h1>
+          <p class="hero-copy">
+            This MVP lets you mark the athlete's release point and the intended scoring
+            point, then calculates the shot angle directly from the frame.
+          </p>
+        </div>
+        <div class="hero-card">
+          <p class="hero-card-title">How it works</p>
+          <ol>
+            <li>Upload a photo or video.</li>
+            <li>Choose the ice direction in the frame.</li>
+            <li>Mark the release point and target.</li>
+            <li>Read the aim angle and shot line overlay.</li>
+          </ol>
+        </div>
+      </header>
+
+      <main class="app-grid">
+        <section class="control-panel">
+          <div class="panel-block">
+            <p class="block-title">Input Mode</p>
+            <div class="segmented-control">
+              <button id="uploadModeBtn" class="is-active" type="button">Upload Media</button>
+              <button id="cameraModeBtn" type="button">Use Camera</button>
+            </div>
+            <p class="helper-text">
+              On a phone, choose camera mode to take a rink photo from the athlete's view.
+            </p>
+          </div>
+
+          <div class="panel-block">
+            <div id="uploadPanel">
+              <label class="file-picker" for="mediaInput">
+                <span>Choose Photo or Video</span>
+                <input id="mediaInput" type="file" accept="image/*,video/*" />
+              </label>
+              <p id="mediaMeta" class="helper-text">
+                No media loaded yet. Images and short training clips both work.
+              </p>
+            </div>
+
+            <div id="cameraPanel" class="hidden">
+              <div class="button-row">
+                <button id="startCameraBtn" type="button">Start Rear Camera</button>
+                <button id="capturePhotoBtn" type="button">Capture Photo</button>
+              </div>
+              <div class="button-row">
+                <button id="switchCameraBtn" type="button">Flip Camera</button>
+                <button id="stopCameraBtn" type="button">Stop Camera</button>
+              </div>
+              <p id="cameraStatus" class="helper-text">
+                Camera off. Use this when you are standing at the hack and want a live view.
+              </p>
+            </div>
+          </div>
+
+          <div class="panel-block">
+            <label for="iceDirection">Ice direction in frame</label>
+            <select id="iceDirection">
+              <option value="up">Athlete throws upward</option>
+              <option value="down">Athlete throws downward</option>
+              <option value="left">Athlete throws left</option>
+              <option value="right">Athlete throws right</option>
+            </select>
+          </div>
+
+          <div class="panel-block hidden" id="videoControls">
+            <div class="video-header">
+              <label for="videoScrubber">Video frame</label>
+              <button id="playPauseBtn" type="button">Play</button>
+            </div>
+            <input id="videoScrubber" type="range" min="0" max="1000" value="0" />
+            <p class="helper-text">Pause on the release frame before marking points.</p>
+          </div>
+
+          <div class="panel-block">
+            <p class="block-title">Mark points</p>
+            <div class="button-row">
+              <button id="markReleaseBtn" class="is-active" type="button">Mark Release</button>
+              <button id="markTargetBtn" type="button">Mark Target</button>
+            </div>
+            <div class="button-row">
+              <button id="resetPointsBtn" type="button">Reset Points</button>
+              <button id="downloadBtn" type="button">Download Overlay</button>
+            </div>
+            <p class="helper-text">
+              Click on the image to place or replace the selected marker.
+            </p>
+          </div>
+
+          <div class="panel-block results">
+            <p class="block-title">Shot Readout</p>
+            <dl>
+              <div>
+                <dt>Aim adjustment</dt>
+                <dd id="aimAdjustment">Waiting for two points</dd>
+              </div>
+              <div>
+                <dt>Absolute angle</dt>
+                <dd id="absoluteAngle">--</dd>
+              </div>
+              <div>
+                <dt>Line distance</dt>
+                <dd id="lineDistance">--</dd>
+              </div>
+            </dl>
+            <p id="coachingNote" class="note">
+              Upload a frame, then mark the release and target to generate a shot line.
+            </p>
+          </div>
+        </section>
+
+        <section class="analysis-panel">
+          <div class="canvas-wrap">
+            <canvas id="analysisCanvas" width="1280" height="720"></canvas>
+            <video id="cameraPreview" class="hidden" playsinline muted></video>
+            <video id="hiddenVideo" class="hidden" playsinline muted></video>
+            <img id="hiddenImage" class="hidden" alt="" />
+          </div>
+          <p class="canvas-caption">
+            Tip: for video, scrub to the exact release moment before placing the release marker.
+          </p>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
